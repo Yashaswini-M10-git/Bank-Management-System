@@ -29,7 +29,7 @@ class BankAccount:
         print("Transaction History")
         for transaction in self.transaction_history:
             print(transaction)
-    def transfer_money(self,other_account,amount):      #acc1.transfer_money(acc2,100)
+    def transfer_money(self,other_account,amount):     
         if self.__balance>=amount:
             self.__balance-=amount
             other_account.__balance+=amount
@@ -67,26 +67,6 @@ acc2.transfer_money(acc1,300)
 acc1.show_transaction_history()
 acc2.show_transaction_history()
 
-# Inheritance allows us to reuse existing code and add new features
-
-# acc1 = SavingsAccount(101, "Yashaswini")
-# SavingsAccount object created         
-#           ↓
-# super().__init__()        //super used for To reuse the parent class constructor/methods instead of writing duplicate code.
-#           ↓
-# BankAccount __init__ runs
-#           ↓
-# account_number = 101
-# name = Yashaswini
-# balance = 0
-
-# it adds its own thing:
-# self.interest_rate=5
-
-# class SavingsAccount(BankAccount):
-#     def __init__(self, account_number, name, interest_rate):
-#         super().__init__(account_number, name)  # Parent setup
-#         self.interest_rate = interest_rate      # Child's extra feature
 class SavingsAccount(BankAccount):
     def __init__(self,acc_no,name,interest_rate):
         super().__init__(acc_no,name)
@@ -101,13 +81,6 @@ class SavingsAccount(BankAccount):
         else:
             print("NO balance available to return interest")
 
-# Get balance
-#       ↓
-# Calculate interest
-#       ↓
-# Deposit interest      //we use deposit method as we cannot directly access th ebalance 
-#       ↓
-# Balance increases
 saving1=SavingsAccount(3,"Yamini",5)
 saving1.add_interest()
 
@@ -168,14 +141,50 @@ class Bank:
                 account.information_account()
                 return
         print("Account Not Found")
+        def transfer_money(self, sender_acc_no, receiver_acc_no, amount):
+            sender = None
+            receiver = None
+            for account in self.accounts:
+                if account.acc_no == sender_acc_no:
+                    sender = account
+                    break
+            for account in self.accounts:
+                if account.acc_no == receiver_acc_no:
+                    receiver = account
+                    break
+            if sender is None:
+                print("Sender account not found.")
+                return
+            if receiver is None:
+                print("Receiver account not found.")
+                return
+            if sender_acc_no == receiver_acc_no:
+                print("Cannot transfer money to the same account.")
+                return
+            if amount <= 0:
+                print("Invalid amount.")
+                return
+            if sender.get_balance() < amount:
+                print("Insufficient balance.")
+                return
+            sender.withdraw(amount)
+            receiver.deposit(amount)
+
+            print(f"₹{amount} transferred successfully.")
+            print(f"From Account : {sender.name}")
+            print(f"To Account   : {receiver.name}")
+acc5=BankAccount(5,"Meena")
+acc6=BankAccount(6,"Amulya")
+acc7=BankAccount(7,"Pavithra")
 bank1=Bank()
-bank1.add_account(acc1)
-bank1.add_account(acc2)
+bank1.add_account(acc5)
+bank1.add_account(acc6)
+bank1.add_account(acc7)
 
 bank1.display_account()
-bank1.search_account(1)
-bank1.delete_account(2)
-bank1.update_account(2,"Dhamini")
+bank1.search_account(5)
+bank1.delete_account(7)
+bank1.update_account(7,"Rahul")
 
 
 
